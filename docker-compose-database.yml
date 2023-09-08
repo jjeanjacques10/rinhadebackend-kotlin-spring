@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'persondb'
+      MYSQL_USER: 'jjuser'
+      MYSQL_PASSWORD: 'person'
+      MYSQL_ROOT_PASSWORD: 'person'
+    ports:
+      - '3306:3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - person-network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
+    networks:
+      - person-network
+
+networks:
+  person-network:
+    driver: bridge
+
+volumes:
+  my-db:

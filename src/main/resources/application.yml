@@ -1,0 +1,16 @@
+server:
+  port : 8081
+
+spring:
+  datasource:
+    driver-class-name: ${DRIVER_DB:com.mysql.cj.jdbc.Driver}
+    username: ${USER_DB:root}
+    password: ${PASSWORD_DB:person}
+    url: ${URL_DB:jdbc:mysql://localhost:3306/persondb?useSSL=false}
+  jpa:
+    defer-datasource-initialization: true
+    generate-ddl: true
+    hibernate.ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      jakarta.persistence.query.timeout: 3000

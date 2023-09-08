@@ -1,0 +1,83 @@
+version: '3.5'
+services:
+  api1: # API - Instância 01
+    build:
+      context: .
+    hostname: api1
+    depends_on:
+      - db
+    expose:
+      - "80"
+    networks:
+      - person-network
+    environment:
+      URL_DB: jdbc:mysql://db:3306/db?useSSL=false
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
+
+  api2: # API - Instância 02
+    build:
+      context: .
+    hostname: api2
+    depends_on:
+      - db
+    expose:
+      - "80"
+    networks:
+      - person-network
+    environment:
+      URL_DB: jdbc:mysql://db:3306/db?useSSL=false
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
+
+  nginx: # Load Balancer
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api1
+      - api2
+    ports:
+      - "9999:9999"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
+
+  db:
+    image: mysql:5.7
+    hostname: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'persondb'
+      MYSQL_USER: 'jjuser'
+      MYSQL_PASSWORD: 'person'
+      MYSQL_ROOT_PASSWORD: 'person'
+    ports:
+      - '3306:3306'
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - person-network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
+    networks:
+      - person-network
+
+networks:
+  person-network:
+    driver: bridge
+
+volumes:
+  my-db:
