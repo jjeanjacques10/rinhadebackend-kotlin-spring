@@ -16,6 +16,7 @@ class ValidationService {
         }
         person.stack?.forEach {
             if (it.length > 32) throw IllegalArgumentException("stack deve ser menor que 32 caracteres")
+            if (it.matches("-?\\d+(\\.\\d+)?".toRegex())) throw IllegalArgumentException("stack deve ser uma string nao numerica")
         }
     }
 
