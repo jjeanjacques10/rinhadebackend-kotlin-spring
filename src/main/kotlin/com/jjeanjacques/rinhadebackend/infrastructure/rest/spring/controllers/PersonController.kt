@@ -9,6 +9,8 @@ import com.jjeanjacques.rinhadebackend.infrastructure.rest.spring.dto.PersonDto
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.net.URI
+import java.util.UUID
 import javax.validation.Valid
 
 @Validated
@@ -25,12 +27,12 @@ class PersonController(
         validationService.validPerson(personDto)
         val person = objectMapper.convertValue(personDto, Person::class.java)
         personService.createPerson(person)
-        return ResponseEntity.ok(CreatePersonResponseDto("Person Created"))
+        return ResponseEntity.created(URI.create("/pessoas/${person.id}")).body(CreatePersonResponseDto("Person Created"))
     }
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): ResponseEntity<Person> {
-        val person = personService.findPersonById(id)
+    fun getById(@PathVariable id: String): ResponseEntity<Person> {
+        val person = personService.findPersonById(UUID.fromString(id))
         return ResponseEntity.ok(person)
     }
 

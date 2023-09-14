@@ -8,10 +8,8 @@ services:
       - db
     expose:
       - "80"
-    networks:
-      - person-network
     environment:
-      URL_DB: jdbc:mysql://db:3306/db?useSSL=false
+      URL_DB: 'jdbc:mysql://db:3306/persondb?useSSL=false'
     deploy:
       resources:
         limits:
@@ -26,10 +24,8 @@ services:
       - db
     expose:
       - "80"
-    networks:
-      - person-network
     environment:
-      URL_DB: jdbc:mysql://db:3306/db?useSSL=false
+      URL_DB: 'jdbc:mysql://db:3306/persondb?useSSL=false'
     deploy:
       resources:
         limits:
@@ -64,16 +60,13 @@ services:
       - '3306:3306'
     volumes:
       - my-db:/var/lib/mysql
-    networks:
-      - person-network
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   adminer:
     image: adminer
     restart: always
     ports:
       - '8080:8080'
-    networks:
-      - person-network
 
 networks:
   person-network:

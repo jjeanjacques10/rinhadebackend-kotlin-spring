@@ -2,22 +2,23 @@ package com.jjeanjacques.rinhadebackend.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import org.springframework.format.annotation.DateTimeFormat
+import jakarta.persistence.*
+import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDate
+import java.util.*
 
 
 @Entity
 @Table(name = "people")
 data class Person(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
+        @GeneratedValue(generator = "UUID")
+        @GenericGenerator(
+                name = "UUID",
+                strategy = "org.hibernate.id.UUIDGenerator"
+        )
+        @Column(name = "id", updatable = false, nullable = false)
+        val id: UUID? = null,
 
         @JsonProperty("apelido")
         @Column(length = 32, unique = true)
@@ -31,6 +32,11 @@ data class Person(
         @JsonFormat(pattern = "yyyy-MM-dd")
         val birthDay: LocalDate?,
 
-        @JsonProperty("stack")
+        @ElementCollection
+        @CollectionTable(
+                name = "person_stack",
+                joinColumns = [JoinColumn(name = "person_id")]
+        )
+        @Column(name = "stack")
         val stack: List<String>?
 )

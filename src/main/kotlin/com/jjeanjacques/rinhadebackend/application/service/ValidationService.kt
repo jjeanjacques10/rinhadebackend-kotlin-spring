@@ -1,5 +1,6 @@
 package com.jjeanjacques.rinhadebackend.application.service
 
+import com.jjeanjacques.rinhadebackend.application.service.exception.IllegalArgumentTypeException
 import com.jjeanjacques.rinhadebackend.infrastructure.rest.spring.dto.PersonDto
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -10,13 +11,14 @@ class ValidationService {
     fun validPerson(person: PersonDto) {
         when {
             person.name.isNullOrBlank() -> throw IllegalArgumentException("nome não deve ser nulo")
+            person.name.matches("-?\\d+(\\.\\d+)?".toRegex()) -> throw IllegalArgumentTypeException("nome deve ser uma string nao numerica")
             person.nickName.isNullOrBlank() -> throw IllegalArgumentException("apelido não deve ser nulo")
             person.birthDay == null -> throw IllegalArgumentException("nascimento não deve ser nulo")
             !isValidDateFormat(person.birthDay) -> throw IllegalArgumentException("nascimento deve ter o formato AAAA-MM-DD")
         }
         person.stack?.forEach {
             if (it.length > 32) throw IllegalArgumentException("stack deve ser menor que 32 caracteres")
-            if (it.matches("-?\\d+(\\.\\d+)?".toRegex())) throw IllegalArgumentException("stack deve ser uma string nao numerica")
+            if (it.matches("-?\\d+(\\.\\d+)?".toRegex())) throw IllegalArgumentTypeException("stack deve ser uma string nao numerica")
         }
     }
 
