@@ -3,6 +3,7 @@ package com.jjeanjacques.rinhadebackend.infrastructure.rest.spring.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jjeanjacques.rinhadebackend.application.service.PersonService
 import com.jjeanjacques.rinhadebackend.application.service.ValidationService
+import com.jjeanjacques.rinhadebackend.application.service.exception.IllegalArgumentTypeException
 import com.jjeanjacques.rinhadebackend.domain.Person
 import com.jjeanjacques.rinhadebackend.infrastructure.rest.spring.dto.PersonDto
 import org.springframework.http.ResponseEntity
@@ -19,9 +20,9 @@ import javax.validation.Valid
 @RequestMapping("/pessoas")
 @Validated
 class PersonController(
-        val personService: PersonService,
-        val validationService: ValidationService,
-        val objectMapper: ObjectMapper
+    val personService: PersonService,
+    val validationService: ValidationService,
+    val objectMapper: ObjectMapper
 ) {
 
     @PostMapping
@@ -39,7 +40,8 @@ class PersonController(
     }
 
     @GetMapping
-    fun searchPeople(@RequestParam(name = "t", required = false) term: String?): ResponseEntity<List<Person>> {
+    fun searchPeople(@RequestParam(name = "t", required = true) term: String?): ResponseEntity<List<Person>> {
+        if (term.isNullOrBlank()) throw IllegalArgumentTypeException("termo nao deve ser nulo")
         val people = personService.search(term)
         return ResponseEntity.ok(people)
     }
