@@ -1,13 +1,17 @@
 package com.jjeanjacques.rinhadebackend.infrastructure.rest.spring.advice
 
 import com.jjeanjacques.rinhadebackend.application.service.exception.IllegalArgumentTypeException
+import com.jjeanjacques.rinhadebackend.application.service.exception.InvalidArgumentTypeException
 import com.jjeanjacques.rinhadebackend.application.service.exception.PersonNotFoundException
 import jakarta.persistence.PersistenceException
+import org.springframework.context.annotation.Primary
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.lang.Nullable
+import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -30,6 +34,17 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     override fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException, headers: HttpHeaders, status: HttpStatusCode, request: WebRequest): ResponseEntity<Any>? {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionDetailsDTO(
+                title = "Invalid Fields Error",
+                timestamp = LocalDateTime.now().toString(),
+                status = HttpStatus.BAD_REQUEST.value(),
+                details = ex.message,
+                developerMethod = ex.javaClass.getName()
+        ))
+    }
+
+    @ExceptionHandler(InvalidArgumentTypeException::class)
+    fun handleInvalidArgumentTypeException(ex: InvalidArgumentTypeException, headers: HttpHeaders, status: HttpStatusCode, request: WebRequest): ResponseEntity<Any>? {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionDetailsDTO(
                 title = "Invalid Fields Error",
                 timestamp = LocalDateTime.now().toString(),
@@ -75,13 +90,25 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails)
     }
 
+    @Primary
     @ExceptionHandler(value = [SQLException::class, PersistenceException::class])
     fun handleDatabaseExceptions(ex: Exception, request: WebRequest): ResponseEntity<Any> {
         val errorDetails = ExceptionDetailsDTO(
                 title = "Database Error",
                 timestamp = LocalDateTime.now().toString(),
                 status = HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                details = ex.message,
+                details = ex.message ?: "Unknown error",
+                developerMethod = ex.javaClass.name
+        )
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorDetails)
+    }
+
+    override fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException, headers: HttpHeaders, status: HttpStatusCode, request: WebRequest): ResponseEntity<Any>? {
+        val errorDetails = ExceptionDetailsDTO(
+                title = "Unprocessable Entity",
+                timestamp = LocalDateTime.now().toString(),
+                status = HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                details = ex.message ?: "Unknown error",
                 developerMethod = ex.javaClass.name
         )
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorDetails)

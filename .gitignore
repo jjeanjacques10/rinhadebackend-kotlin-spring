@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### Tests ###
-stress-test/gatling
+stress-test/gatling-old

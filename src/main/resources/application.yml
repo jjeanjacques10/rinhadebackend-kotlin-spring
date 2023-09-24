@@ -2,6 +2,8 @@ server:
   port : ${PORT:80}
 
 spring:
+  main:
+    banner-mode: off
   datasource:
     driver-class-name: ${DRIVER_DB:com.mysql.cj.jdbc.Driver}
     username: ${USER_DB:root}
@@ -15,7 +17,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
     generate-ddl: true
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       jakarta.persistence.query.timeout: 10000

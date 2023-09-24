@@ -38,5 +38,7 @@ data class Person(
                 joinColumns = [JoinColumn(name = "person_id")]
         )
         @Column(name = "stack")
-        val stack: List<String>?
-)
+        var stack: List<String>? = null
+) {
+    constructor() : this(null, null, null, null, null)
+}

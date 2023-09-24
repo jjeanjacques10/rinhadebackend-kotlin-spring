@@ -3,24 +3,18 @@ package com.jjeanjacques.rinhadebackend.infrastructure.rest.spring.dto
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
-class PersonDto(
-        @JsonProperty("apelido")
-        @field:NotNull(message = "Apelido nao deve ser nulo")
+data class PersonDto(
+        @field:JsonProperty("apelido")
         val nickName: String?,
 
-        @JsonProperty("nome")
-        @field:NotNull(message = "Nome nao deve ser nulo")
-        @field:NotBlank(message = "Name is required")
+        @field:JsonProperty("nome")
         val name: String?,
 
-        @JsonProperty("nascimento")
+        @field:JsonProperty("nascimento")
         @field:JsonFormat(pattern = "yyyy-MM-dd")
-        @field:NotNull(message = "Nascimento nao deve ser nulo")
-        val birthDay: LocalDate?,
+        val birthDay: LocalDate,
 
-        @JsonProperty("stack")
+        @field:JsonProperty("stack")
         val stack: List<String>?
 )
