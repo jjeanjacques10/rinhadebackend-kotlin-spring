@@ -1,5 +1,5 @@
 server:
-  port : ${PORT:80}
+  port: ${PORT:80}
 
 spring:
   main:
@@ -10,7 +10,7 @@ spring:
     password: ${PASSWORD_DB:person}
     url: ${URL_DB:jdbc:mysql://localhost:3306/persondb?useSSL=false}
     hikari:
-      maximum-pool-size: 30
+      maximum-pool-size: 100
       minimum-idle: 10
       idle-timeout: 30000
       connection-timeout: 20000
@@ -21,3 +21,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       jakarta.persistence.query.timeout: 10000
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
