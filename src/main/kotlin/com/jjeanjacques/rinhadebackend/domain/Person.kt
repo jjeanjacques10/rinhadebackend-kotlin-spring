@@ -11,34 +11,29 @@ import java.util.*
 @Entity
 @Table(name = "people")
 data class Person(
-        @Id
-        @GeneratedValue(generator = "UUID")
-        @GenericGenerator(
-                name = "UUID",
-                strategy = "org.hibernate.id.UUIDGenerator"
-        )
-        @Column(name = "id", updatable = false, nullable = false)
-        val id: UUID? = null,
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+    val id: UUID? = null,
 
-        @JsonProperty("apelido")
-        @Column(length = 32, unique = true)
-        val nickName: String?,
+    @JsonProperty("apelido")
+    @Column(length = 32, unique = true)
+    val nickName: String?,
 
-        @JsonProperty("nome")
-        @Column(length = 100)
-        val name: String?,
+    @JsonProperty("nome")
+    @Column(length = 100)
+    val name: String?,
 
-        @JsonProperty("nascimento")
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        val birthDay: LocalDate?,
+    @JsonProperty("nascimento")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    val birthDay: LocalDate,
 
-        @ElementCollection
-        @CollectionTable(
-                name = "person_stack",
-                joinColumns = [JoinColumn(name = "person_id")]
-        )
-        @Column(name = "stack")
-        var stack: List<String>? = null
+    @Column(length = 255)
+    var stack: String? = null
 ) {
-    constructor() : this(null, null, null, null, null)
+    constructor() : this(null, null, null, LocalDate.now(), null)
 }

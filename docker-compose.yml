@@ -3,41 +3,41 @@ services:
   api01: # API - Instância 01
     build:
       context: .
+    network_mode: host
     hostname: api01
     depends_on:
       - db
-    expose:
-      - "80"
     environment:
-      URL_DB: 'jdbc:mysql://db:3306/persondb?useSSL=false'
+      SERVER_PORT: 8081
+      URL_DB: 'jdbc:mysql://localhost:3306/persondb?useSSL=false'
+      LOG_LEVEL: INFO
     deploy:
       resources:
         limits:
           cpus: '0.25'
           memory: 500M
-    networks:
-      - app-network
 
   api02: # API - Instância 02
     build:
       context: .
+    network_mode: host
     hostname: api02
     depends_on:
       - db
-    expose:
-      - "80"
     environment:
-      URL_DB: 'jdbc:mysql://db:3306/persondb?useSSL=false'
+      SERVER_PORT: 8082
+      URL_DB: 'jdbc:mysql://localhost:3306/persondb?useSSL=false'
+      LOG_LEVEL: INFO
     deploy:
       resources:
         limits:
           cpus: '0.25'
           memory: 500M
-    networks:
-      - app-network
 
   nginx:
     image: nginx:latest
+    container_name: nginx
+    network_mode: host
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -50,11 +50,10 @@ services:
         limits:
           cpus: '0.5'
           memory: 500M
-    networks:
-      - app-network
 
   db:
     image: mysql:5.7
+    network_mode: host
     hostname: db
     restart: always
     environment:
@@ -66,15 +65,10 @@ services:
       - '3306:3306'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - app-network
     command: --innodb_buffer_pool_size=512M --innodb_log_buffer_size=64M --innodb_flush_log_at_trx_commit=2 --innodb_flush_method=O_DIRECT
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - '8080:8080'
-
-networks:
-  app-network:
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - '8080:8080'

@@ -25,4 +25,4 @@ spring:
 
 logging:
   level:
-    root: FATAL
+    root: ${LOG_LEVEL:INFO}

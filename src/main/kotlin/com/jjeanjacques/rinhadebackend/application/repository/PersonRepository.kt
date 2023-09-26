@@ -14,7 +14,7 @@ interface PersonRepository : JpaRepository<Person, UUID> {
         "SELECT p FROM Person p WHERE " +
                 "p.name LIKE :term OR " +
                 "p.nickName LIKE :term OR " +
-                "EXISTS (SELECT s FROM p.stack s WHERE s LIKE :term)"
+                "p.stack LIKE :term"
     )
     fun searchByTerm(term: String, pageable: Pageable): List<Person>
 }

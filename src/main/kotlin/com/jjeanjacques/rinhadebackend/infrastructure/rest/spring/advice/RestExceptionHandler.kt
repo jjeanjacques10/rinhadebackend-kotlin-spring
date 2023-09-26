@@ -24,94 +24,97 @@ import java.time.LocalDateTime
 class RestExceptionHandler : ResponseEntityExceptionHandler() {
 
     override fun handleExceptionInternal(ex: Exception, @Nullable body: Any?, headers: HttpHeaders, statusCode: HttpStatusCode, request: WebRequest): ResponseEntity<Any>? {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionDetailsDTO(
-                title = ex.cause?.message,
-                timestamp = LocalDateTime.now().toString(),
-                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                details = ex.message,
-                developerMethod = ex.javaClass.getName()
-        ))
+        /*val body = ExceptionDetailsDTO(
+            title = ex.cause?.message,
+            timestamp = LocalDateTime.now().toString(),
+            status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            details = ex.message,
+            developerMethod = ex.javaClass.getName()
+        )*/
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
     }
 
     override fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException, headers: HttpHeaders, status: HttpStatusCode, request: WebRequest): ResponseEntity<Any>? {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionDetailsDTO(
-                title = "Invalid Fields Error",
-                timestamp = LocalDateTime.now().toString(),
-                status = HttpStatus.BAD_REQUEST.value(),
-                details = ex.message,
-                developerMethod = ex.javaClass.getName()
-        ))
+        /*val body = ExceptionDetailsDTO(
+            title = "Invalid Fields Error",
+            timestamp = LocalDateTime.now().toString(),
+            status = HttpStatus.BAD_REQUEST.value(),
+            details = ex.message,
+            developerMethod = ex.javaClass.getName()
+        )*/
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null)
     }
 
     @ExceptionHandler(InvalidArgumentTypeException::class)
     fun handleInvalidArgumentTypeException(ex: InvalidArgumentTypeException, headers: HttpHeaders, status: HttpStatusCode, request: WebRequest): ResponseEntity<Any>? {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionDetailsDTO(
-                title = "Invalid Fields Error",
-                timestamp = LocalDateTime.now().toString(),
-                status = HttpStatus.BAD_REQUEST.value(),
-                details = ex.message,
-                developerMethod = ex.javaClass.getName()
-        ))
+        /*val body = ExceptionDetailsDTO(
+            title = "Invalid Fields Error",
+            timestamp = LocalDateTime.now().toString(),
+            status = HttpStatus.BAD_REQUEST.value(),
+            details = ex.message,
+            developerMethod = ex.javaClass.getName()
+        )*/
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null)
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(ex: IllegalArgumentException, request: WebRequest): ResponseEntity<Any> {
-        val errorDetails = ExceptionDetailsDTO(
+        /*val errorDetails = ExceptionDetailsDTO(
                 title = "Validation Error",
                 timestamp = LocalDateTime.now().toString(),
                 status = HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 details = ex.message,
                 developerMethod = ex.javaClass.name
-        )
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorDetails)
+        )*/
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null)
     }
 
     @ExceptionHandler(IllegalArgumentTypeException::class)
     fun handleIllegalTypeArgumentException(ex: IllegalArgumentTypeException, request: WebRequest): ResponseEntity<Any> {
-        val errorDetails = ExceptionDetailsDTO(
+        /*val errorDetails = ExceptionDetailsDTO(
                 title = "Validation Error",
                 timestamp = LocalDateTime.now().toString(),
                 status = HttpStatus.BAD_REQUEST.value(),
                 details = ex.message,
                 developerMethod = ex.javaClass.name
-        )
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails)
+        )*/
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null)
     }
 
     @ExceptionHandler(PersonNotFoundException::class)
     fun handlePersonNotFoundException(ex: PersonNotFoundException, request: WebRequest): ResponseEntity<Any> {
-        val errorDetails = ExceptionDetailsDTO(
+        /*val errorDetails = ExceptionDetailsDTO(
                 title = "Person not found",
                 timestamp = LocalDateTime.now().toString(),
                 status = HttpStatus.NOT_FOUND.value(),
                 details = ex.message,
                 developerMethod = ex.javaClass.name
-        )
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails)
+        )*/
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
     }
 
     @Primary
     @ExceptionHandler(value = [SQLException::class, PersistenceException::class])
     fun handleDatabaseExceptions(ex: Exception, request: WebRequest): ResponseEntity<Any> {
-        val errorDetails = ExceptionDetailsDTO(
+        /*val errorDetails = ExceptionDetailsDTO(
                 title = "Database Error",
                 timestamp = LocalDateTime.now().toString(),
                 status = HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 details = ex.message ?: "Unknown error",
                 developerMethod = ex.javaClass.name
-        )
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorDetails)
+        )*/
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null)
     }
 
     override fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException, headers: HttpHeaders, status: HttpStatusCode, request: WebRequest): ResponseEntity<Any>? {
-        val errorDetails = ExceptionDetailsDTO(
+        /*val errorDetails = ExceptionDetailsDTO(
                 title = "Unprocessable Entity",
                 timestamp = LocalDateTime.now().toString(),
                 status = HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 details = ex.message ?: "Unknown error",
                 developerMethod = ex.javaClass.name
-        )
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorDetails)
+        )*/
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(null)
     }
 
 }

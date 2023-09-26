@@ -1,12 +1,13 @@
 package com.jjeanjacques.rinhadebackend.application.service
 
+import com.jjeanjacques.rinhadebackend.application.converter.PersonConverter
 import com.jjeanjacques.rinhadebackend.application.repository.PersonRepository
 import com.jjeanjacques.rinhadebackend.application.service.exception.PersonNotFoundException
 import com.jjeanjacques.rinhadebackend.domain.Person
+import com.jjeanjacques.rinhadebackend.infrastructure.rest.spring.dto.PersonDto
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -26,15 +27,11 @@ class PersonService(
             .orElseThrow { PersonNotFoundException("Pessoa com id $id não encontrada") }
     }
 
-    fun search(term: String?): List<Person> {
-        val limit: Pageable = PageRequest.of(0, 50)
-        if (term.isNullOrBlank()) {
-            return personRepository.findAll(limit).toList()
-        }
+    fun search(term: String): List<PersonDto> {
         return personRepository.searchByTerm(
             term,
-            pageable = limit
-        )
+            pageable = PageRequest.of(0, 50)
+        ).map(PersonConverter::convertPersonToDto)
     }
 
     fun getCountPeople(): Long {

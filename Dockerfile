@@ -6,4 +6,4 @@ COPY ${JAR_FILE} app.jar
 
 ENTRYPOINT ["java", "-XX:+UseParallelGC", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]
 
-EXPOSE 80
+EXPOSE ${SERVER_PORT}
