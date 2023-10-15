@@ -8,10 +8,15 @@ Aplicação desenvolvida para a rinha de backend utilizando Kotlin com Spring Bo
 - Kotlin
 - MySQL
 
+## Gatling
+
+Requests com sucesso: **31.304**
+
+![simulation01.png](files%2Fsimulation01.png)
+
 ## Rinha de Backend
 
 Repositório da rinha: https://github.com/zanfranceschi/rinha-de-backend-2023-q3
-
 
 ## Gatling
 

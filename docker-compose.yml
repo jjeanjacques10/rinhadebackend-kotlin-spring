@@ -10,7 +10,7 @@ services:
     environment:
       SERVER_PORT: 8081
       URL_DB: 'jdbc:mysql://localhost:3306/persondb?useSSL=false'
-      LOG_LEVEL: INFO
+      LOG_LEVEL: ERROR
     deploy:
       resources:
         limits:
@@ -27,7 +27,7 @@ services:
     environment:
       SERVER_PORT: 8082
       URL_DB: 'jdbc:mysql://localhost:3306/persondb?useSSL=false'
-      LOG_LEVEL: INFO
+      LOG_LEVEL: ERROR
     deploy:
       resources:
         limits:
@@ -43,8 +43,6 @@ services:
     depends_on:
       - api01
       - api02
-    ports:
-      - "9999:9999"
     deploy:
       resources:
         limits:
@@ -61,8 +59,6 @@ services:
       MYSQL_USER: 'jjuser'
       MYSQL_PASSWORD: 'person'
       MYSQL_ROOT_PASSWORD: 'person'
-    ports:
-      - '3306:3306'
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     command: --innodb_buffer_pool_size=512M --innodb_log_buffer_size=64M --innodb_flush_log_at_trx_commit=2 --innodb_flush_method=O_DIRECT

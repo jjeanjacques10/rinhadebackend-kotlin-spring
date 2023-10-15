@@ -21,7 +21,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       jakarta.persistence.query.timeout: 10000
-    show-sql: true
+    show-sql: false
 
 logging:
   level:
